@@ -1355,8 +1355,8 @@
     const direct = await getDominantColor(sourceUrl);
     if (direct) return direct;
     if (fallbackUrl && fallbackUrl !== sourceUrl) {
-      const cover = await getDominantColor(fallbackUrl);
-      if (cover) return cover;
+      const cover2 = await getDominantColor(fallbackUrl);
+      if (cover2) return cover2;
     }
     const palette = await getPaletteColor(Spicetify.Player?.data?.item?.uri ?? null);
     if (palette) return palette;
@@ -1481,13 +1481,13 @@
       return d2.context?.uri || d2.contextUri || d2.context_uri || state.context?.uri || state.contextUri || state.context_uri || "";
     }
     window.glowifyContextDebug = async () => {
-      const cover = getCoverUrl();
+      const cover2 = getCoverUrl();
       return {
         uri: getContextUri(),
         context: Spicetify.Player?.data?.context,
         rawCoverUrl: Spicetify.Player?.data?.item?.metadata?.image_url ?? null,
-        coverUrl: cover,
-        coverSampledColor: await getDominantColor(cover),
+        coverUrl: cover2,
+        coverSampledColor: await getDominantColor(cover2),
         paletteColor: await getPaletteColor(Spicetify.Player?.data?.item?.uri ?? null),
         accentSource: localStorage.getItem("glowify-accent-source") || "background"
       };
@@ -1836,6 +1836,7 @@
       npv: "Vinyl in Sidebar:",
       playbar: "Vinyl in Playbar:",
       cinema: "Vinyl in Cinema View:",
+      miniPlayer: "Vinyl in Mini Player:",
       speed: "Seconds Per Turn:"
     },
     kawarp: {
@@ -2085,7 +2086,7 @@
       backgroundBlur: "Hintergrundunsch\xE4rfe (px):",
       animatedBackground: "Animierter Hintergrund:",
       animatedEngine: "Engine:",
-      vinyl: { npv: "Vinyl in Seitenleiste:", playbar: "Vinyl in Playbar:", cinema: "Vinyl im Cinema-Modus:", speed: "Sekunden pro Umdrehung:" },
+      vinyl: { npv: "Vinyl in Seitenleiste:", playbar: "Vinyl in Playbar:", cinema: "Vinyl im Cinema-Modus:", miniPlayer: "Vinyl im Mini-Player:", speed: "Sekunden pro Umdrehung:" },
       kawarp: { warp: "Verzerrungsst\xE4rke (%):", speed: "Animationsgeschwindigkeit (%):", saturation: "S\xE4ttigung (%):", scale: "Skalierung (%):", contrast: "Kontrast (%):" },
       backgroundBrightness: "Hintergrundhelligkeit (%):",
       apbackground: "K\xFCnstlerseiten-Hintergrund:",
@@ -3146,7 +3147,7 @@
       kawarp: { warp: "\u0421\u0438\u043B\u0430 \u0438\u0441\u043A\u0430\u0436\u0435\u043D\u0438\u044F (%):", speed: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0430\u043D\u0438\u043C\u0430\u0446\u0438\u0438 (%):", saturation: "\u041D\u0430\u0441\u044B\u0449\u0435\u043D\u043D\u043E\u0441\u0442\u044C (%):", scale: "\u041C\u0430\u0441\u0448\u0442\u0430\u0431 (%):", contrast: "\u041A\u043E\u043D\u0442\u0440\u0430\u0441\u0442 (%):" },
       sections: { language: "\u042F\u0437\u044B\u043A" },
       subSections: { kawarp: "\u0410\u043D\u0438\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u044B\u0439 \u0444\u043E\u043D", sidebars: "\u0411\u043E\u043A\u043E\u0432\u044B\u0435 \u043F\u0430\u043D\u0435\u043B\u0438", vinyl: "\u0412\u0438\u043D\u0438\u043B" },
-      vinyl: { npv: "\u0412\u0438\u043D\u0438\u043B \u0432 \u0431\u043E\u043A\u043E\u0432\u043E\u0439 \u043F\u0430\u043D\u0435\u043B\u0438:", playbar: "\u0412\u0438\u043D\u0438\u043B \u0432 \u043F\u043B\u0435\u0435\u0440\u0435:", cinema: "\u0412\u0438\u043D\u0438\u043B \u0432 \u043A\u0438\u043D\u043E\u0440\u0435\u0436\u0438\u043C\u0435:", speed: "\u0421\u0435\u043A\u0443\u043D\u0434 \u043D\u0430 \u043E\u0431\u043E\u0440\u043E\u0442:" },
+      vinyl: { npv: "\u0412\u0438\u043D\u0438\u043B \u0432 \u0431\u043E\u043A\u043E\u0432\u043E\u0439 \u043F\u0430\u043D\u0435\u043B\u0438:", playbar: "\u0412\u0438\u043D\u0438\u043B \u0432 \u043F\u043B\u0435\u0435\u0440\u0435:", cinema: "\u0412\u0438\u043D\u0438\u043B \u0432 \u043A\u0438\u043D\u043E\u0440\u0435\u0436\u0438\u043C\u0435:", miniPlayer: "\u0412\u0438\u043D\u0438\u043B \u0432 \u043C\u0438\u043D\u0438-\u043F\u043B\u0435\u0435\u0440\u0435:", speed: "\u0421\u0435\u043A\u0443\u043D\u0434 \u043D\u0430 \u043E\u0431\u043E\u0440\u043E\u0442:" },
       dropdown: { engineTiles: "\u041A\u043B\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043A\u0438\u0439" },
       ui: { leftSidebarBlur: "\u0420\u0430\u0437\u043C\u044B\u0442\u0438\u0435 \u0437\u0430 \u043B\u0435\u0432\u043E\u0439 \u043F\u0430\u043D\u0435\u043B\u044C\u044E:", leftSidebarBlurAmount: "\u0420\u0430\u0437\u043C\u044B\u0442\u0438\u0435 \u043B\u0435\u0432\u043E\u0439 \u043F\u0430\u043D\u0435\u043B\u0438 (px):", rightSidebarBlur: "\u0420\u0430\u0437\u043C\u044B\u0442\u0438\u0435 \u0437\u0430 \u043F\u0440\u0430\u0432\u043E\u0439 \u043F\u0430\u043D\u0435\u043B\u044C\u044E:", rightSidebarBlurAmount: "\u0420\u0430\u0437\u043C\u044B\u0442\u0438\u0435 \u043F\u0440\u0430\u0432\u043E\u0439 \u043F\u0430\u043D\u0435\u043B\u0438 (px):", localFilesTransparent: "\u041F\u0440\u043E\u0437\u0440\u0430\u0447\u043D\u0430\u044F \u043A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 \u043B\u043E\u043A\u0430\u043B\u044C\u043D\u044B\u0445 \u0444\u0430\u0439\u043B\u043E\u0432:" },
       tooltips: {
@@ -3171,7 +3172,7 @@
       kawarp: { warp: "Intensidad de distorsi\xF3n (%):", speed: "Velocidad de animaci\xF3n (%):", saturation: "Saturaci\xF3n (%):", scale: "Escala (%):", contrast: "Contraste (%):" },
       sections: { language: "Idioma" },
       subSections: { kawarp: "Fondo animado", sidebars: "Barras laterales", vinyl: "Vinilo" },
-      vinyl: { npv: "Vinilo en la barra lateral:", playbar: "Vinilo en el reproductor:", cinema: "Vinilo en modo cine:", speed: "Segundos por vuelta:" },
+      vinyl: { npv: "Vinilo en la barra lateral:", playbar: "Vinilo en el reproductor:", cinema: "Vinilo en modo cine:", miniPlayer: "Vinilo en el minirreproductor:", speed: "Segundos por vuelta:" },
       dropdown: { engineTiles: "Cl\xE1sico" },
       ui: { leftSidebarBlur: "Desenfoque tras la barra izquierda:", leftSidebarBlurAmount: "Desenfoque barra izquierda (px):", rightSidebarBlur: "Desenfoque tras la barra derecha:", rightSidebarBlurAmount: "Desenfoque barra derecha (px):", localFilesTransparent: "Tarjeta de archivos locales transparente:" },
       tooltips: {
@@ -3196,7 +3197,7 @@
       kawarp: { warp: "Intensidade da distor\xE7\xE3o (%):", speed: "Velocidade da anima\xE7\xE3o (%):", saturation: "Satura\xE7\xE3o (%):", scale: "Escala (%):", contrast: "Contraste (%):" },
       sections: { language: "Idioma" },
       subSections: { kawarp: "Fundo animado", sidebars: "Barras laterais", vinyl: "Vinil" },
-      vinyl: { npv: "Vinil na barra lateral:", playbar: "Vinil no player:", cinema: "Vinil no modo cinema:", speed: "Segundos por volta:" },
+      vinyl: { npv: "Vinil na barra lateral:", playbar: "Vinil no player:", cinema: "Vinil no modo cinema:", miniPlayer: "Vinil no mini player:", speed: "Segundos por volta:" },
       dropdown: { engineTiles: "Cl\xE1ssico" },
       ui: { leftSidebarBlur: "Desfoque atr\xE1s da barra esquerda:", leftSidebarBlurAmount: "Desfoque da barra esquerda (px):", rightSidebarBlur: "Desfoque atr\xE1s da barra direita:", rightSidebarBlurAmount: "Desfoque da barra direita (px):", localFilesTransparent: "Cart\xE3o de arquivos locais transparente:" },
       tooltips: {
@@ -3221,7 +3222,7 @@
       kawarp: { warp: "B\xFCk\xFClme \u015Fiddeti (%):", speed: "Animasyon h\u0131z\u0131 (%):", saturation: "Doygunluk (%):", scale: "\xD6l\xE7ek (%):", contrast: "Kontrast (%):" },
       sections: { language: "Dil" },
       subSections: { kawarp: "Animasyonlu arka plan", sidebars: "Kenar \xE7ubuklar\u0131", vinyl: "Plak" },
-      vinyl: { npv: "Kenar \xE7ubu\u011Funda plak:", playbar: "Oynat\u0131c\u0131da plak:", cinema: "Sinema modunda plak:", speed: "Tur ba\u015F\u0131na saniye:" },
+      vinyl: { npv: "Kenar \xE7ubu\u011Funda plak:", playbar: "Oynat\u0131c\u0131da plak:", cinema: "Sinema modunda plak:", miniPlayer: "Mini oynat\u0131c\u0131da plak:", speed: "Tur ba\u015F\u0131na saniye:" },
       dropdown: { engineTiles: "Klasik" },
       ui: { leftSidebarBlur: "Sol kenar \xE7ubu\u011Funun arkas\u0131n\u0131 bulan\u0131kla\u015Ft\u0131r:", leftSidebarBlurAmount: "Sol kenar \xE7ubu\u011Fu bulan\u0131kl\u0131\u011F\u0131 (px):", rightSidebarBlur: "Sa\u011F kenar \xE7ubu\u011Funun arkas\u0131n\u0131 bulan\u0131kla\u015Ft\u0131r:", rightSidebarBlurAmount: "Sa\u011F kenar \xE7ubu\u011Fu bulan\u0131kl\u0131\u011F\u0131 (px):", localFilesTransparent: "\u015Eeffaf yerel dosyalar kart\u0131:" },
       tooltips: {
@@ -3246,7 +3247,7 @@
       kawarp: { warp: "\u0935\u093F\u0915\u0943\u0924\u093F \u0924\u0940\u0935\u094D\u0930\u0924\u093E (%):", speed: "\u090F\u0928\u093F\u092E\u0947\u0936\u0928 \u0917\u0924\u093F (%):", saturation: "\u0938\u0902\u0924\u0943\u092A\u094D\u0924\u093F (%):", scale: "\u0938\u094D\u0915\u0947\u0932 (%):", contrast: "\u0915\u0902\u091F\u094D\u0930\u093E\u0938\u094D\u091F (%):" },
       sections: { language: "\u092D\u093E\u0937\u093E" },
       subSections: { kawarp: "\u090F\u0928\u093F\u092E\u0947\u091F\u0947\u0921 \u092C\u0948\u0915\u0917\u094D\u0930\u093E\u0909\u0902\u0921", sidebars: "\u0938\u093E\u0907\u0921\u092C\u093E\u0930", vinyl: "\u0935\u093F\u0928\u093E\u0907\u0932" },
-      vinyl: { npv: "\u0938\u093E\u0907\u0921\u092C\u093E\u0930 \u092E\u0947\u0902 \u0935\u093F\u0928\u093E\u0907\u0932:", playbar: "\u092A\u094D\u0932\u0947\u092F\u0930 \u092E\u0947\u0902 \u0935\u093F\u0928\u093E\u0907\u0932:", cinema: "\u0938\u093F\u0928\u0947\u092E\u093E \u092E\u094B\u0921 \u092E\u0947\u0902 \u0935\u093F\u0928\u093E\u0907\u0932:", speed: "\u092A\u094D\u0930\u0924\u093F \u091A\u0915\u094D\u0915\u0930 \u0938\u0947\u0915\u0902\u0921:" },
+      vinyl: { npv: "\u0938\u093E\u0907\u0921\u092C\u093E\u0930 \u092E\u0947\u0902 \u0935\u093F\u0928\u093E\u0907\u0932:", playbar: "\u092A\u094D\u0932\u0947\u092F\u0930 \u092E\u0947\u0902 \u0935\u093F\u0928\u093E\u0907\u0932:", cinema: "\u0938\u093F\u0928\u0947\u092E\u093E \u092E\u094B\u0921 \u092E\u0947\u0902 \u0935\u093F\u0928\u093E\u0907\u0932:", miniPlayer: "\u092E\u093F\u0928\u0940 \u092A\u094D\u0932\u0947\u092F\u0930 \u092E\u0947\u0902 \u0935\u093F\u0928\u093E\u0907\u0932:", speed: "\u092A\u094D\u0930\u0924\u093F \u091A\u0915\u094D\u0915\u0930 \u0938\u0947\u0915\u0902\u0921:" },
       dropdown: { engineTiles: "\u0915\u094D\u0932\u093E\u0938\u093F\u0915" },
       ui: { leftSidebarBlur: "\u092C\u093E\u090F\u0901 \u0938\u093E\u0907\u0921\u092C\u093E\u0930 \u0915\u0947 \u092A\u0940\u091B\u0947 \u092C\u094D\u0932\u0930:", leftSidebarBlurAmount: "\u092C\u093E\u092F\u093E\u0901 \u0938\u093E\u0907\u0921\u092C\u093E\u0930 \u092C\u094D\u0932\u0930 (px):", rightSidebarBlur: "\u0926\u093E\u090F\u0901 \u0938\u093E\u0907\u0921\u092C\u093E\u0930 \u0915\u0947 \u092A\u0940\u091B\u0947 \u092C\u094D\u0932\u0930:", rightSidebarBlurAmount: "\u0926\u093E\u092F\u093E\u0901 \u0938\u093E\u0907\u0921\u092C\u093E\u0930 \u092C\u094D\u0932\u0930 (px):", localFilesTransparent: "\u0932\u094B\u0915\u0932 \u092B\u093C\u093E\u0907\u0932\u094D\u0938 \u0915\u093E\u0930\u094D\u0921 \u092A\u093E\u0930\u0926\u0930\u094D\u0936\u0940:" },
       tooltips: {
@@ -3271,7 +3272,7 @@
       kawarp: { warp: "F\xF6rvr\xE4ngningsstyrka (%):", speed: "Animationshastighet (%):", saturation: "M\xE4ttnad (%):", scale: "Skala (%):", contrast: "Kontrast (%):" },
       sections: { language: "Spr\xE5k" },
       subSections: { kawarp: "Animerad bakgrund", sidebars: "Sidopaneler", vinyl: "Vinyl" },
-      vinyl: { npv: "Vinyl i sidopanelen:", playbar: "Vinyl i spelaren:", cinema: "Vinyl i biol\xE4ge:", speed: "Sekunder per varv:" },
+      vinyl: { npv: "Vinyl i sidopanelen:", playbar: "Vinyl i spelaren:", cinema: "Vinyl i biol\xE4ge:", miniPlayer: "Vinyl i minispelaren:", speed: "Sekunder per varv:" },
       dropdown: { engineTiles: "Klassisk" },
       ui: { leftSidebarBlur: "Osk\xE4rpa bakom v\xE4nster sidopanel:", leftSidebarBlurAmount: "Osk\xE4rpa v\xE4nster sidopanel (px):", rightSidebarBlur: "Osk\xE4rpa bakom h\xF6ger sidopanel:", rightSidebarBlurAmount: "Osk\xE4rpa h\xF6ger sidopanel (px):", localFilesTransparent: "Genomskinligt kort f\xF6r lokala filer:" },
       tooltips: {
@@ -3296,7 +3297,7 @@
       kawarp: { warp: "\u3086\u304C\u307F\u306E\u5F37\u3055 (%):", speed: "\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u901F\u5EA6 (%):", saturation: "\u5F69\u5EA6 (%):", scale: "\u30B9\u30B1\u30FC\u30EB (%):", contrast: "\u30B3\u30F3\u30C8\u30E9\u30B9\u30C8 (%):" },
       sections: { language: "\u8A00\u8A9E" },
       subSections: { kawarp: "\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u80CC\u666F", sidebars: "\u30B5\u30A4\u30C9\u30D0\u30FC", vinyl: "\u30EC\u30B3\u30FC\u30C9" },
-      vinyl: { npv: "\u30B5\u30A4\u30C9\u30D0\u30FC\u306E\u30EC\u30B3\u30FC\u30C9:", playbar: "\u30D7\u30EC\u30FC\u30E4\u30FC\u306E\u30EC\u30B3\u30FC\u30C9:", cinema: "\u30B7\u30CD\u30DE\u30E2\u30FC\u30C9\u306E\u30EC\u30B3\u30FC\u30C9:", speed: "1\u56DE\u8EE2\u306E\u79D2\u6570:" },
+      vinyl: { npv: "\u30B5\u30A4\u30C9\u30D0\u30FC\u306E\u30EC\u30B3\u30FC\u30C9:", playbar: "\u30D7\u30EC\u30FC\u30E4\u30FC\u306E\u30EC\u30B3\u30FC\u30C9:", cinema: "\u30B7\u30CD\u30DE\u30E2\u30FC\u30C9\u306E\u30EC\u30B3\u30FC\u30C9:", miniPlayer: "\u30DF\u30CB\u30D7\u30EC\u30FC\u30E4\u30FC\u306E\u30EC\u30B3\u30FC\u30C9:", speed: "1\u56DE\u8EE2\u306E\u79D2\u6570:" },
       dropdown: { engineTiles: "\u30AF\u30E9\u30B7\u30C3\u30AF" },
       ui: { leftSidebarBlur: "\u5DE6\u30B5\u30A4\u30C9\u30D0\u30FC\u306E\u80CC\u666F\u3092\u307C\u304B\u3059:", leftSidebarBlurAmount: "\u5DE6\u30B5\u30A4\u30C9\u30D0\u30FC\u306E\u307C\u304B\u3057 (px):", rightSidebarBlur: "\u53F3\u30B5\u30A4\u30C9\u30D0\u30FC\u306E\u80CC\u666F\u3092\u307C\u304B\u3059:", rightSidebarBlurAmount: "\u53F3\u30B5\u30A4\u30C9\u30D0\u30FC\u306E\u307C\u304B\u3057 (px):", localFilesTransparent: "\u30ED\u30FC\u30AB\u30EB\u30D5\u30A1\u30A4\u30EB\u306E\u30AB\u30FC\u30C9\u3092\u900F\u660E\u306B:" },
       tooltips: {
@@ -3321,7 +3322,7 @@
       kawarp: { warp: "\u626D\u66F2\u5F3A\u5EA6 (%):", speed: "\u52A8\u753B\u901F\u5EA6 (%):", saturation: "\u9971\u548C\u5EA6 (%):", scale: "\u7F29\u653E (%):", contrast: "\u5BF9\u6BD4\u5EA6 (%):" },
       sections: { language: "\u8BED\u8A00" },
       subSections: { kawarp: "\u52A8\u753B\u80CC\u666F", sidebars: "\u4FA7\u8FB9\u680F", vinyl: "\u9ED1\u80F6" },
-      vinyl: { npv: "\u4FA7\u8FB9\u680F\u9ED1\u80F6:", playbar: "\u64AD\u653E\u5668\u9ED1\u80F6:", cinema: "\u5F71\u9662\u6A21\u5F0F\u9ED1\u80F6:", speed: "\u6BCF\u5708\u79D2\u6570:" },
+      vinyl: { npv: "\u4FA7\u8FB9\u680F\u9ED1\u80F6:", playbar: "\u64AD\u653E\u5668\u9ED1\u80F6:", cinema: "\u5F71\u9662\u6A21\u5F0F\u9ED1\u80F6:", miniPlayer: "\u8FF7\u4F60\u64AD\u653E\u5668\u9ED1\u80F6:", speed: "\u6BCF\u5708\u79D2\u6570:" },
       dropdown: { engineTiles: "\u7ECF\u5178" },
       ui: { leftSidebarBlur: "\u6A21\u7CCA\u5DE6\u4FA7\u680F\u80CC\u666F:", leftSidebarBlurAmount: "\u5DE6\u4FA7\u680F\u6A21\u7CCA (px):", rightSidebarBlur: "\u6A21\u7CCA\u53F3\u4FA7\u680F\u80CC\u666F:", rightSidebarBlurAmount: "\u53F3\u4FA7\u680F\u6A21\u7CCA (px):", localFilesTransparent: "\u672C\u5730\u6587\u4EF6\u5361\u7247\u900F\u660E:" },
       tooltips: {
@@ -3346,7 +3347,7 @@
       kawarp: { warp: "\uC65C\uACE1 \uAC15\uB3C4 (%):", speed: "\uC560\uB2C8\uBA54\uC774\uC158 \uC18D\uB3C4 (%):", saturation: "\uCC44\uB3C4 (%):", scale: "\uD06C\uAE30 (%):", contrast: "\uB300\uBE44 (%):" },
       sections: { language: "\uC5B8\uC5B4" },
       subSections: { kawarp: "\uC560\uB2C8\uBA54\uC774\uC158 \uBC30\uACBD", sidebars: "\uC0AC\uC774\uB4DC\uBC14", vinyl: "\uBC14\uC774\uB2D0" },
-      vinyl: { npv: "\uC0AC\uC774\uB4DC\uBC14 \uBC14\uC774\uB2D0:", playbar: "\uD50C\uB808\uC774\uC5B4 \uBC14\uC774\uB2D0:", cinema: "\uC2DC\uB124\uB9C8 \uBAA8\uB4DC \uBC14\uC774\uB2D0:", speed: "\uD55C \uBC14\uD034\uB2F9 \uCD08:" },
+      vinyl: { npv: "\uC0AC\uC774\uB4DC\uBC14 \uBC14\uC774\uB2D0:", playbar: "\uD50C\uB808\uC774\uC5B4 \uBC14\uC774\uB2D0:", cinema: "\uC2DC\uB124\uB9C8 \uBAA8\uB4DC \uBC14\uC774\uB2D0:", miniPlayer: "\uBBF8\uB2C8 \uD50C\uB808\uC774\uC5B4 \uBC14\uC774\uB2D0:", speed: "\uD55C \uBC14\uD034\uB2F9 \uCD08:" },
       dropdown: { engineTiles: "\uD074\uB798\uC2DD" },
       ui: { leftSidebarBlur: "\uC67C\uCABD \uC0AC\uC774\uB4DC\uBC14 \uB4A4 \uD750\uB9AC\uAC8C:", leftSidebarBlurAmount: "\uC67C\uCABD \uC0AC\uC774\uB4DC\uBC14 \uD750\uB9BC (px):", rightSidebarBlur: "\uC624\uB978\uCABD \uC0AC\uC774\uB4DC\uBC14 \uB4A4 \uD750\uB9AC\uAC8C:", rightSidebarBlurAmount: "\uC624\uB978\uCABD \uC0AC\uC774\uB4DC\uBC14 \uD750\uB9BC (px):", localFilesTransparent: "\uB85C\uCEEC \uD30C\uC77C \uCE74\uB4DC \uD22C\uBA85:" },
       tooltips: {
@@ -4474,10 +4475,14 @@
   function installCoverSwipe() {
     (() => {
       const anyWin = window;
-      const STYLE_ID14 = "cs-cover-swipe";
+      const STYLE_ID15 = "cs-cover-swipe";
       const TRACK_ID = "cs-track";
       const TRAVEL = 2;
       const DURATION = Math.round(300 * TRAVEL * 0.9);
+      const SETTLE = 190;
+      const TOTAL = DURATION + SETTLE;
+      const SLIDE_END = (DURATION / TOTAL * 100).toFixed(2);
+      const OVERSHOOT = 3.5;
       const FADE = 250;
       const CANVAS_SCALE = 1.1;
       const CANVAS_FADE = 500;
@@ -4488,10 +4493,10 @@
       const VIDEO_SEL = "#VideoPlayerNpv_ReactPortal";
       const CINEMA_SEL = ".Root__cinema-view";
       const CONTAINER_SEL = ".main-nowPlayingView-coverArtContainer";
-      document.getElementById(STYLE_ID14)?.remove();
+      document.getElementById(STYLE_ID15)?.remove();
       anyWin.__coverSwipeOff?.();
       const style = document.createElement("style");
-      style.id = STYLE_ID14;
+      style.id = STYLE_ID15;
       style.textContent = `
         ${CONTAINER_SEL}:has(#${TRACK_ID}) .main-nowPlayingView-coverArt {
             visibility: hidden !important;
@@ -4586,9 +4591,28 @@
         #${TRACK_ID} .cs-prev    { transform: translateX(calc(var(--cs-travel) * -1)); }
         #${TRACK_ID} .cs-next,
         #${TRACK_ID} .cs-prev    { visibility: hidden; }
+        /* The outgoing cover, which only has to leave. Unchanged curve and
+           unchanged duration \u2014 nobody sees it land, so it needs no settle. */
         #${TRACK_ID}.cs-animating .cs-slot {
-            transition: transform ${DURATION}ms cubic-bezier(.4,0,.2,1);
+            transition: transform ${DURATION}ms cubic-bezier(.4, 0, .2, 1);
         }
+        /* The arriving cover gets the spring, as two legs rather than one curve
+           (see SETTLE). The first runs to ${SLIDE_END}% of the total, which is
+           exactly the old ${DURATION}ms, on exactly the old easing \u2014 so the
+           swipe travels at the pace it always did. It stops ${OVERSHOOT}% of a
+           cover width past centre, and the remaining ${SETTLE}ms ease that back. */
+        @keyframes glowifyCsArriveNext {
+            0%   { transform: translateX(var(--cs-travel)); animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
+            ${SLIDE_END}% { transform: translateX(-${OVERSHOOT}%); animation-timing-function: cubic-bezier(.33, 0, .25, 1); }
+            100% { transform: translateX(0); }
+        }
+        @keyframes glowifyCsArrivePrev {
+            0%   { transform: translateX(calc(var(--cs-travel) * -1)); animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
+            ${SLIDE_END}% { transform: translateX(${OVERSHOOT}%); animation-timing-function: cubic-bezier(.33, 0, .25, 1); }
+            100% { transform: translateX(0); }
+        }
+        #${TRACK_ID}.cs-animating.cs-going-next .cs-next { animation: glowifyCsArriveNext ${TOTAL}ms both; }
+        #${TRACK_ID}.cs-animating.cs-going-prev .cs-prev { animation: glowifyCsArrivePrev ${TOTAL}ms both; }
         /* Only the two slots taking part are revealed. Showing every slot would
            put the idle third one on screen too, stacked on the outgoing one.
            visibility isn't interpolated, so each appears at its parked position
@@ -4872,7 +4896,7 @@
         if (animating) {
           setTimeout(() => {
             if (canvasVisible) hideTrackForCanvas();
-          }, DURATION);
+          }, TOTAL);
           return;
         }
         const r = track.getBoundingClientRect();
@@ -4987,7 +5011,7 @@
             if (!track) return;
             refreshAdjacent();
           }, 150);
-        }, DURATION + 20);
+        }, TOTAL + 20);
       };
       const swipeWithKnownTarget = (dir, newUrl, newUri) => {
         if (!track || animating || canvasVisible) return;
@@ -5025,7 +5049,7 @@
             if (!track) return;
             refreshAdjacent();
           }, 150);
-        }, DURATION + 20);
+        }, TOTAL + 20);
       };
       const crossfadeToNew = (newUrl, newUri) => {
         if (!track || !clip || animating || canvasVisible) return;
@@ -5172,10 +5196,256 @@
           if (origNext) Spicetify.Player.next = origNext;
           if (origBack) Spicetify.Player.back = origBack;
         }
-        document.getElementById(STYLE_ID14)?.remove();
+        document.getElementById(STYLE_ID15)?.remove();
         delete anyWin.__coverSwipeOff;
       };
     })();
+  }
+
+  // src/settings/features/vinylCoverArt.ts
+  var STYLE_ID2 = "glowify-vinyl-style";
+  var PLAY_STATE_KEY = "glowifyVinylPlayState";
+  var PLAYING_CLASS = "glowify-playing";
+  var VINYL_SPEED_KEY = "glowify-vinyl-speed";
+  var VINYL_SPEED_DEFAULT = 12;
+  var VINYL_SURFACES = {
+    npv: { key: "glowify-vinyl-npv" },
+    playbar: { key: "glowify-vinyl-playbar" },
+    cinema: { key: "glowify-vinyl-cinema" },
+    miniPlayer: { key: "glowify-vinyl-mini-player" }
+  };
+  function isVinylOn(surface) {
+    return readLS(VINYL_SURFACES[surface].key, "off") === "on";
+  }
+  function discFurniture(disc) {
+    return `
+${disc}::before,
+${disc}::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+}
+/* The pressed grooves, drawn rather than imaged. Cleared through the middle,
+   where the label sits. */
+${disc}::before {
+  background: repeating-radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.055) 0 1px,
+    rgba(0, 0, 0, 0.14) 1px 3px
+  );
+  opacity: 0.5;
+  mask-image: radial-gradient(circle at 50% 50%, transparent 0 22%, black 26%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0 22%, black 26%);
+}
+/* Label and spindle in one paint: the dark hole sits over the accent disc. */
+${disc}::after {
+  background:
+    radial-gradient(circle at 50% 50%, #06080b 0 6.5%, transparent 6.6%),
+    radial-gradient(circle at 50% 50%, var(--accent-color, #1ed760) 0 17%, transparent 17.1%);
+}`;
+  }
+  function vinylCss(disc, art) {
+    return `
+${disc} {
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  position: relative;
+}
+${art} {
+  border-radius: 50% !important;
+  /* Paused rather than stopped, so it holds its angle while the music does \u2014
+     the animation runs from the moment the element exists, only its play state
+     moves. */
+  animation: glowify-vinyl-spin var(--glowify-vinyl-spin, 12s) linear infinite;
+  animation-play-state: paused;
+}
+html.${PLAYING_CLASS} ${art} { animation-play-state: running; }
+${discFurniture(disc)}`;
+  }
+  function buildCss() {
+    const parts = [];
+    if (isVinylOn("npv")) {
+      parts.push(vinylCss(".main-nowPlayingView-coverArt", ".main-nowPlayingView-coverArt img"));
+      parts.push(`
+#cs-track .cs-slot { border-radius: 50% !important; }
+#cs-track .cs-face {
+  border-radius: 50% !important;
+  animation: glowify-vinyl-spin var(--glowify-vinyl-spin, 12s) linear infinite;
+  animation-play-state: paused;
+}
+html.${PLAYING_CLASS} #cs-track .cs-face { animation-play-state: running; }
+${discFurniture("#cs-track .cs-face")}`);
+    }
+    if (isVinylOn("playbar")) {
+      parts.push(vinylCss(
+        ".main-coverSlotCollapsed-container .cover-art",
+        ".main-coverSlotCollapsed-container .cover-art .cover-art-image"
+      ));
+      parts.push(`
+.main-coverSlotCollapsed-container .main-nowPlayingWidget-coverArtContainer,
+.main-coverSlotCollapsed-container .main-nowPlayingWidget-coverArt {
+  border-radius: 50% !important;
+  background: transparent !important;
+}`);
+    }
+    if (isVinylOn("cinema")) {
+      parts.push(vinylCss(
+        ".Root__cinema-view .cover-art",
+        ".Root__cinema-view .cover-art .cover-art-image"
+      ));
+    }
+    if (parts.length === 0) return "";
+    const seconds = Math.max(1, readNum(VINYL_SPEED_KEY, VINYL_SPEED_DEFAULT));
+    return `:root { --glowify-vinyl-spin: ${seconds}s; }
+${parts.join("\n")}
+
+@keyframes glowify-vinyl-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html.${PLAYING_CLASS} [class*="cover-art"], html.${PLAYING_CLASS} .cs-face { animation: none !important; }
+}`;
+  }
+  function installPlayState() {
+    const win = window;
+    if (win[PLAY_STATE_KEY]) return;
+    win[PLAY_STATE_KEY] = true;
+    const sync = () => {
+      const playing = Boolean(win.Spicetify?.Player?.isPlaying?.());
+      document.documentElement.classList.toggle(PLAYING_CLASS, playing);
+    };
+    sync();
+    win.Spicetify?.Player?.addEventListener?.("onplaypause", sync);
+    setInterval(sync, 1e3);
+  }
+  function applyCss() {
+    updateStyle(STYLE_ID2, buildCss());
+    refreshMiniPlayer();
+  }
+  function setVinyl(surface, mode) {
+    localStorage.setItem(VINYL_SURFACES[surface].key, mode === "on" ? "on" : "off");
+    applyCss();
+  }
+  function setVinylSpeed(seconds) {
+    localStorage.setItem(VINYL_SPEED_KEY, String(seconds));
+    applyCss();
+  }
+  function resetVinyl() {
+    for (const surface of Object.keys(VINYL_SURFACES)) {
+      localStorage.setItem(VINYL_SURFACES[surface].key, "off");
+    }
+    localStorage.setItem(VINYL_SPEED_KEY, String(VINYL_SPEED_DEFAULT));
+    applyCss();
+  }
+  function ensureVinylApplied() {
+    installPlayState();
+    applyCss();
+  }
+
+  // src/settings/features/miniPlayer.ts
+  var STYLE_ID3 = "glowify-mini-player-style";
+  var PLAYING_CLASS2 = "glowify-playing";
+  var INSTALLED_KEY = "glowifyMiniPlayerInstalled";
+  var RADIUS = 20;
+  var COVER_SELECTORS = [
+    '[data-testid="document-pip-cover-art-animation-container"] img',
+    ".E6aAqvl6gGgGLteK"
+  ];
+  var cover = (prefix = "") => COVER_SELECTORS.map((s2) => prefix + s2).join(", ");
+  var DISC = '[data-testid="document-pip-cover-art-animation-container"] > div';
+  function miniPlayerCss() {
+    if (!isVinylOn("miniPlayer")) {
+      return `${cover()} { border-radius: ${RADIUS}px !important; }`;
+    }
+    const spin = Math.max(1, readNum(VINYL_SPEED_KEY, VINYL_SPEED_DEFAULT));
+    return `
+${cover()} {
+  border-radius: 50% !important;
+  /* Paused rather than stopped, so it holds its angle while the music does. */
+  animation: glowify-vinyl-spin ${spin}s linear infinite;
+  animation-play-state: paused;
+}
+${cover(`html.${PLAYING_CLASS2} `)} { animation-play-state: running; }
+
+/* The grooves and the accent label are pseudo-elements, and <img> is a replaced
+   element that cannot have any \u2014 so they hang on the box that wraps the cover.
+   That box is left exactly as Spotify sizes and positions it. Giving it
+   position: relative blew the cover up to the picture's natural size and pushed
+   it past the panel, which says it is positioned already: it is its own anchor,
+   and the layers below need nothing added to reach it. */
+${discFurniture(DISC)}
+
+/* Everywhere else the disc box *is* the square cover, so the furniture's
+   inset: 0 lands on a circle. Here the box is wider than the picture inside it,
+   which stretched the grooves into an ellipse across the panel. Squared off and
+   centred instead \u2014 on the two layers themselves, which are out of flow, so this
+   cannot resize the cover the way touching the box did. */
+${DISC}::before,
+${DISC}::after {
+  inset: auto;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes glowify-vinyl-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  ${cover()} { animation: none !important; }
+}`;
+  }
+  function pipWindow() {
+    return window.documentPictureInPicture?.window ?? null;
+  }
+  function applyToWindow(win) {
+    const doc = win.document;
+    if (!doc?.head) return;
+    let style = doc.getElementById(STYLE_ID3);
+    if (!style) {
+      style = doc.createElement("style");
+      style.id = STYLE_ID3;
+      doc.head.appendChild(style);
+    }
+    const css = miniPlayerCss();
+    if (style.textContent !== css) style.textContent = css;
+    const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent-color").trim();
+    if (accent) doc.documentElement.style.setProperty("--accent-color", accent);
+    doc.documentElement.classList.toggle(
+      PLAYING_CLASS2,
+      document.documentElement.classList.contains(PLAYING_CLASS2)
+    );
+  }
+  function refreshMiniPlayer() {
+    const win = pipWindow();
+    if (win) applyToWindow(win);
+  }
+  function installMiniPlayer() {
+    const anyWin = window;
+    if (anyWin[INSTALLED_KEY]) {
+      refreshMiniPlayer();
+      return;
+    }
+    const pip = anyWin.documentPictureInPicture;
+    if (!pip?.addEventListener) return;
+    anyWin[INSTALLED_KEY] = true;
+    pip.addEventListener("enter", (event) => {
+      const win = event.window ?? pipWindow();
+      if (!win) return;
+      applyToWindow(win);
+      const tick = win.setInterval(() => {
+        if (!pipWindow()) {
+          win.clearInterval(tick);
+          return;
+        }
+        applyToWindow(win);
+      }, 1e3);
+    });
+    refreshMiniPlayer();
   }
 
   // src/settings/features/lyricsTranslator.ts
@@ -6001,26 +6271,26 @@
       const artists = target?.querySelector(".main-trackInfo-artists");
       if (!target || !source || !name || !artists) return;
       let wrap = target.querySelector(".glowify-npv-row");
-      let cover = target.querySelector(".glowify-npv-cover");
+      let cover2 = target.querySelector(".glowify-npv-cover");
       let text = target.querySelector(".glowify-npv-text");
       if (!wrap) {
         wrap = document.createElement("div");
         wrap.className = "glowify-npv-row";
         wrap.style.cssText = "display:flex;align-items:center;gap:12px;width:100%;min-width:0;";
-        cover = document.createElement("img");
-        cover.className = "glowify-npv-cover";
-        cover.style.cssText = "width:56px;height:56px;min-width:56px;object-fit:cover;border-radius:10px;display:block;";
-        cover.draggable = false;
+        cover2 = document.createElement("img");
+        cover2.className = "glowify-npv-cover";
+        cover2.style.cssText = "width:56px;height:56px;min-width:56px;object-fit:cover;border-radius:10px;display:block;";
+        cover2.draggable = false;
         text = document.createElement("div");
         text.className = "glowify-npv-text";
         text.style.cssText = "display:flex;flex-direction:column;justify-content:center;min-width:0;flex:1;overflow:hidden;";
         name.style.minWidth = "0";
         artists.style.minWidth = "0";
         text.append(name, artists);
-        wrap.append(cover, text);
+        wrap.append(cover2, text);
         target.replaceChildren(wrap);
       }
-      if (cover) cover.src = source.src;
+      if (cover2) cover2.src = source.src;
     }
     function removeOutsideCover() {
       updateStyle(OUTSIDE_STYLE_ID, "");
@@ -6092,10 +6362,10 @@
   }
 
   // src/settings/features/actionBarBox.ts
-  var STYLE_ID2 = "glowify-action-bar-box-style";
+  var STYLE_ID4 = "glowify-action-bar-box-style";
   function updateActionBarBoxCss(show) {
     const css = show ? "" : ".main-actionBar-ActionBar { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: none !important; }";
-    updateStyle(STYLE_ID2, css);
+    updateStyle(STYLE_ID4, css);
   }
   function applyActionBarBox(mode) {
     const m2 = mode === "show" ? "show" : "hide";
@@ -6110,7 +6380,7 @@
   // src/settings/features/glassBlur.ts
   var BACKDROP_BLUR_KEY = "glowify-backdrop-blur";
   var BACKDROP_BLUR_DEFAULT = 32;
-  function applyCss() {
+  function applyCss2() {
     const backdrop = readNum(BACKDROP_BLUR_KEY, BACKDROP_BLUR_DEFAULT);
     updateStyle(
       "glowify-backdrop-blur",
@@ -6119,14 +6389,14 @@
   }
   function setBackdropBlur(px) {
     localStorage.setItem(BACKDROP_BLUR_KEY, String(px));
-    applyCss();
+    applyCss2();
   }
   function ensureBackdropBlurApplied() {
-    applyCss();
+    applyCss2();
   }
 
   // src/settings/features/sidebarBlur.ts
-  var STYLE_ID3 = "glowify-sidebar-blur-style";
+  var STYLE_ID5 = "glowify-sidebar-blur-style";
   var SIDEBAR_BLUR_DEFAULT = 24;
   var SIDEBARS = {
     left: {
@@ -6146,7 +6416,7 @@
   function readSidebarBlurAmount(side) {
     return readNum(SIDEBARS[side].amountKey, SIDEBAR_BLUR_DEFAULT);
   }
-  function applyCss2() {
+  function applyCss3() {
     const rules = [];
     for (const side of Object.keys(SIDEBARS)) {
       if (!isSidebarBlurOn(side)) continue;
@@ -6158,32 +6428,32 @@
 }`
       );
     }
-    updateStyle(STYLE_ID3, rules.join("\n\n"));
+    updateStyle(STYLE_ID5, rules.join("\n\n"));
   }
   function setSidebarBlur(side, mode) {
     localStorage.setItem(SIDEBARS[side].key, mode === "on" ? "on" : "off");
-    applyCss2();
+    applyCss3();
   }
   function setSidebarBlurAmount(side, px) {
     localStorage.setItem(SIDEBARS[side].amountKey, String(px));
-    applyCss2();
+    applyCss3();
   }
   function resetSidebarBlur() {
     for (const side of Object.keys(SIDEBARS)) {
       localStorage.setItem(SIDEBARS[side].key, "off");
       localStorage.setItem(SIDEBARS[side].amountKey, String(SIDEBAR_BLUR_DEFAULT));
     }
-    applyCss2();
+    applyCss3();
   }
   function ensureSidebarBlurApplied() {
-    applyCss2();
+    applyCss3();
   }
 
   // src/settings/features/fonts.ts
   var FONT_BODY_KEY = "glowify-font-body";
   var FONT_HEADING_KEY = "glowify-font-heading";
   var FONT_DEFAULT = "default";
-  var STYLE_ID4 = "glowify-fonts-style";
+  var STYLE_ID6 = "glowify-fonts-style";
   var FAMILY_LINK_ID = "glowify-font-families";
   var PREVIEW_LINK_ID = "glowify-font-previews";
   var FONT_CATEGORIES = [
@@ -6274,7 +6544,7 @@
   font-family: ${stack} !important;
 }`);
     }
-    updateStyle(STYLE_ID4, rules.join("\n\n"));
+    updateStyle(STYLE_ID6, rules.join("\n\n"));
   }
   function setFont(which, family) {
     localStorage.setItem(which === "body" ? FONT_BODY_KEY : FONT_HEADING_KEY, family);
@@ -6289,154 +6559,14 @@
     applyFonts();
   }
 
-  // src/settings/features/vinylCoverArt.ts
-  var STYLE_ID5 = "glowify-vinyl-style";
-  var PLAY_STATE_KEY = "glowifyVinylPlayState";
-  var PLAYING_CLASS = "glowify-playing";
-  var VINYL_SPEED_KEY = "glowify-vinyl-speed";
-  var VINYL_SPEED_DEFAULT = 12;
-  var VINYL_SURFACES = {
-    npv: { key: "glowify-vinyl-npv" },
-    playbar: { key: "glowify-vinyl-playbar" },
-    cinema: { key: "glowify-vinyl-cinema" }
-  };
-  function isVinylOn(surface) {
-    return readLS(VINYL_SURFACES[surface].key, "off") === "on";
-  }
-  function discFurniture(disc) {
-    return `
-${disc}::before,
-${disc}::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 3;
-}
-/* The pressed grooves, drawn rather than imaged. Cleared through the middle,
-   where the label sits. */
-${disc}::before {
-  background: repeating-radial-gradient(
-    circle at 50% 50%,
-    rgba(255, 255, 255, 0.055) 0 1px,
-    rgba(0, 0, 0, 0.14) 1px 3px
-  );
-  opacity: 0.5;
-  mask-image: radial-gradient(circle at 50% 50%, transparent 0 22%, black 26%);
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0 22%, black 26%);
-}
-/* Label and spindle in one paint: the dark hole sits over the accent disc. */
-${disc}::after {
-  background:
-    radial-gradient(circle at 50% 50%, #06080b 0 6.5%, transparent 6.6%),
-    radial-gradient(circle at 50% 50%, var(--accent-color, #1ed760) 0 17%, transparent 17.1%);
-}`;
-  }
-  function vinylCss(disc, art) {
-    return `
-${disc} {
-  border-radius: 50% !important;
-  overflow: hidden !important;
-  position: relative;
-}
-${art} {
-  border-radius: 50% !important;
-  /* Paused rather than stopped, so it holds its angle while the music does \u2014
-     the animation runs from the moment the element exists, only its play state
-     moves. */
-  animation: glowify-vinyl-spin var(--glowify-vinyl-spin, 12s) linear infinite;
-  animation-play-state: paused;
-}
-html.${PLAYING_CLASS} ${art} { animation-play-state: running; }
-${discFurniture(disc)}`;
-  }
-  function buildCss() {
-    const parts = [];
-    if (isVinylOn("npv")) {
-      parts.push(vinylCss(".main-nowPlayingView-coverArt", ".main-nowPlayingView-coverArt img"));
-      parts.push(`
-#cs-track .cs-slot { border-radius: 50% !important; }
-#cs-track .cs-face {
-  border-radius: 50% !important;
-  animation: glowify-vinyl-spin var(--glowify-vinyl-spin, 12s) linear infinite;
-  animation-play-state: paused;
-}
-html.${PLAYING_CLASS} #cs-track .cs-face { animation-play-state: running; }
-${discFurniture("#cs-track .cs-face")}`);
-    }
-    if (isVinylOn("playbar")) {
-      parts.push(vinylCss(
-        ".main-coverSlotCollapsed-container .cover-art",
-        ".main-coverSlotCollapsed-container .cover-art .cover-art-image"
-      ));
-      parts.push(`
-.main-coverSlotCollapsed-container .main-nowPlayingWidget-coverArtContainer,
-.main-coverSlotCollapsed-container .main-nowPlayingWidget-coverArt {
-  border-radius: 50% !important;
-  background: transparent !important;
-}`);
-    }
-    if (isVinylOn("cinema")) {
-      parts.push(vinylCss(
-        ".Root__cinema-view .cover-art",
-        ".Root__cinema-view .cover-art .cover-art-image"
-      ));
-    }
-    if (parts.length === 0) return "";
-    const seconds = Math.max(1, readNum(VINYL_SPEED_KEY, VINYL_SPEED_DEFAULT));
-    return `:root { --glowify-vinyl-spin: ${seconds}s; }
-${parts.join("\n")}
-
-@keyframes glowify-vinyl-spin { to { transform: rotate(360deg); } }
-
-@media (prefers-reduced-motion: reduce) {
-  html.${PLAYING_CLASS} [class*="cover-art"], html.${PLAYING_CLASS} .cs-face { animation: none !important; }
-}`;
-  }
-  function installPlayState() {
-    const win = window;
-    if (win[PLAY_STATE_KEY]) return;
-    win[PLAY_STATE_KEY] = true;
-    const sync = () => {
-      const playing = Boolean(win.Spicetify?.Player?.isPlaying?.());
-      document.documentElement.classList.toggle(PLAYING_CLASS, playing);
-    };
-    sync();
-    win.Spicetify?.Player?.addEventListener?.("onplaypause", sync);
-    setInterval(sync, 1e3);
-  }
-  function applyCss3() {
-    updateStyle(STYLE_ID5, buildCss());
-  }
-  function setVinyl(surface, mode) {
-    localStorage.setItem(VINYL_SURFACES[surface].key, mode === "on" ? "on" : "off");
-    applyCss3();
-  }
-  function setVinylSpeed(seconds) {
-    localStorage.setItem(VINYL_SPEED_KEY, String(seconds));
-    applyCss3();
-  }
-  function resetVinyl() {
-    for (const surface of Object.keys(VINYL_SURFACES)) {
-      localStorage.setItem(VINYL_SURFACES[surface].key, "off");
-    }
-    localStorage.setItem(VINYL_SPEED_KEY, String(VINYL_SPEED_DEFAULT));
-    applyCss3();
-  }
-  function ensureVinylApplied() {
-    installPlayState();
-    applyCss3();
-  }
-
   // src/settings/features/localFilesCard.ts
-  var STYLE_ID6 = "glowify-local-files-style";
+  var STYLE_ID7 = "glowify-local-files-style";
   var LOCAL_FILES_TRANSPARENT_KEY = "glowify-local-files-transparent";
   var LOCAL_FILES_CARD = ".KmN1Y8bq8eC6k8TX";
   function applyCss4() {
     const on = readLS(LOCAL_FILES_TRANSPARENT_KEY, "off") === "on";
     updateStyle(
-      STYLE_ID6,
+      STYLE_ID7,
       on ? `${LOCAL_FILES_CARD} {
   background-color: transparent !important;
   /* The fill was the only thing giving the entry an edge; the theme's rim takes
@@ -6454,11 +6584,11 @@ ${parts.join("\n")}
   }
 
   // src/settings/features/homeLayout.ts
-  var STYLE_ID7 = "glowify-home-layout-style";
+  var STYLE_ID8 = "glowify-home-layout-style";
   var HOME_LAYOUT_KEY = "glowify-home-layout";
   function updateHomeLayoutCss(on) {
     const css = on ? ".main-home-content section { padding: 1rem; gap: .5rem; box-shadow: var(--glowify-shadow); border-radius: 20px; }.main-card-cardContainer, .LXxEtdyreLg2dh0C { height: calc(100% - 1px); }.XtiGtrj_ysgd8Bmv { --margin-start: 0px; --margin-end: 0px; }" : ".main-home-content section { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: none !important; }";
-    updateStyle(STYLE_ID7, css);
+    updateStyle(STYLE_ID8, css);
   }
   function applyHomeLayout(mode) {
     const m2 = mode === "on" ? "on" : "off";
@@ -6471,7 +6601,7 @@ ${parts.join("\n")}
   }
 
   // src/settings/features/compactPlayer.ts
-  var STYLE_ID8 = "glowify-compact-player-style";
+  var STYLE_ID9 = "glowify-compact-player-style";
   function updateCss(enabled) {
     const css = enabled ? [
       ".Root__now-playing-bar { height: 65px !important; border-radius: 20px !important; }",
@@ -6482,7 +6612,7 @@ ${parts.join("\n")}
       ".player-controls .playback-bar { flex: 1 1 auto; min-width: 0; }",
       ".BNf2Xbd3qYwZdYVY { display: none !important; }"
     ].join("\n") : "";
-    updateStyle(STYLE_ID8, css);
+    updateStyle(STYLE_ID9, css);
   }
   function applyCompactPlayer(mode) {
     const m2 = mode === "on" ? "on" : "off";
@@ -6524,10 +6654,10 @@ ${parts.join("\n")}
   }
 
   // src/settings/features/playlistHeader.ts
-  var STYLE_ID9 = "glowify-playlist-header-style";
+  var STYLE_ID10 = "glowify-playlist-header-style";
   function updatePlaylistHeaderCss(show) {
     const css = show ? "" : ".main-entityHeader-container { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: none !important; }";
-    updateStyle(STYLE_ID9, css);
+    updateStyle(STYLE_ID10, css);
   }
   function applyPlaylistHeader(mode) {
     const m2 = mode === "show" ? "show" : "hide";
@@ -6541,7 +6671,7 @@ ${parts.join("\n")}
 
   // src/settings/features/playerControlIcons.ts
   var PLAYER_ICONS_KEY = "glowify-player-icons";
-  var STYLE_ID10 = "glowify-player-control-icons-style";
+  var STYLE_ID11 = "glowify-player-control-icons-style";
   var ICON = "glowify-player-icon";
   var PLAYING = "is-playing";
   var SKIPPING = "is-skipping";
@@ -6761,11 +6891,11 @@ ${eachTransport(" svg")}, ${eachTransport(" path")} { fill: currentColor !import
     if (!isPlayerControlIconsEnabled()) {
       win[OBSERVER_KEY]?.disconnect?.();
       win[OBSERVER_KEY] = void 0;
-      updateStyle(STYLE_ID10, getPlayerControlIconsDisabledCss());
+      updateStyle(STYLE_ID11, getPlayerControlIconsDisabledCss());
       removeIcons();
       return;
     }
-    updateStyle(STYLE_ID10, getPlayerControlIconCss());
+    updateStyle(STYLE_ID11, getPlayerControlIconCss());
     applyPlayerControlIcons();
     installPressFeedback(win);
     if (win[OBSERVER_KEY]) return;
@@ -6960,10 +7090,10 @@ ${eachTransport(" svg")}, ${eachTransport(" path")} { fill: currentColor !import
   }
 
   // src/settings/features/transparentPlayer.ts
-  var STYLE_ID11 = "glowify-transparent-player-style";
+  var STYLE_ID12 = "glowify-transparent-player-style";
   function updateTransparentPlayerCss(transparent) {
     const css = transparent ? ".Root__now-playing-bar { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }" : "";
-    updateStyle(STYLE_ID11, css);
+    updateStyle(STYLE_ID12, css);
   }
   function applyTransparentPlayer(mode) {
     const m2 = mode === "on" ? "on" : "off";
@@ -6976,7 +7106,7 @@ ${eachTransport(" svg")}, ${eachTransport(" path")} { fill: currentColor !import
   }
 
   // src/settings/features/floatingPlayer.ts
-  var STYLE_ID12 = "glowify-floating-player-style";
+  var STYLE_ID13 = "glowify-floating-player-style";
   var FLOATING_PLAYER_KEY = "glowify-floating-player";
   function updateFloatingPlayerCss(on) {
     const css = on ? [
@@ -7005,7 +7135,7 @@ ${eachTransport(" svg")}, ${eachTransport(" path")} { fill: currentColor !import
       // with the update, which left this one silently matching nothing.
       'span.encore-inverted-light-set[class*="button-primary__inner"][class*="legacy-button--medium"] { margin-bottom: 7rem !important; }'
     ].join("\n") : "";
-    updateStyle(STYLE_ID12, css);
+    updateStyle(STYLE_ID13, css);
   }
   function applyFloatingPlayer(mode) {
     const m2 = mode === "on" ? "on" : "off";
@@ -7017,10 +7147,10 @@ ${eachTransport(" svg")}, ${eachTransport(" path")} { fill: currentColor !import
   }
 
   // src/settings/features/connectBar.ts
-  var STYLE_ID13 = "glowify-connect-bar-style";
+  var STYLE_ID14 = "glowify-connect-bar-style";
   var CONNECT_BAR_KEY = "glowify-connect-bar";
   function updateConnectBarCss(show) {
-    updateStyle(STYLE_ID13, show ? "" : ".main-connectBar-connectBar { display: none !important; }");
+    updateStyle(STYLE_ID14, show ? "" : ".main-connectBar-connectBar { display: none !important; }");
   }
   function applyConnectBar(mode) {
     const m2 = mode === "show" ? "show" : "hide";
@@ -9850,7 +9980,11 @@ ${eachTransport(" svg")}, ${eachTransport(" path")} { fill: currentColor !import
     const [sectionNavControlsReady, setSectionNavControlsReady] = React.useState(false);
     const useLayout = React.useLayoutEffect || React.useEffect;
     const jumpToSection = (id) => {
-      document.getElementById("glowify-sec-" + id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const target = document.getElementById("glowify-sec-" + id);
+      const body = target?.closest(".glowifySettingsBody");
+      if (!target || !body) return;
+      const top = body.scrollTop + target.getBoundingClientRect().top - body.getBoundingClientRect().top;
+      body.scrollTo({ top, behavior: "smooth" });
     };
     const updateSectionNavScroll = () => {
       const nav = sectionNavRef.current;
@@ -11308,6 +11442,7 @@ ${eachTransport(" svg")}, ${eachTransport(" path")} { fill: currentColor !import
     installNextSongCard();
     installNowPlayingViewCover();
     installCoverSwipe();
+    installMiniPlayer();
     installPlayerControlIcons();
     installShareButtonTransition();
   }
